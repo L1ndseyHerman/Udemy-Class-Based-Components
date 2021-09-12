@@ -2,14 +2,18 @@ import { Fragment, Component } from 'react';
 
 import Users from './Users';
 import styles from './UserFinder.module.css';
+import UsersContext from '../store/users-context';
+import ErrorBoundary from './ErrorBoundary';
 
-const DUMMY_USERS = [
+/*const DUMMY_USERS = [
     { id: 'u1', name: 'Max' },
     { id: 'u2', name: 'Manuel' },
     { id: 'u3', name: 'Julie' },
-  ];
+  ];*/
 
 class UserFinder extends Component {
+    //  Can only connect a class-based component to one context, so use "static":
+    static contextType = UsersContext;
 
     constructor() {
 
@@ -23,13 +27,13 @@ class UserFinder extends Component {
 
     componentDidMount() {
         //  Send http request....
-        this.setState({filteredUsers: DUMMY_USERS});
+        this.setState({filteredUsers: this.context.users});
     }
 
     componentDidUpdate(prevProps, prevState) {
         if (prevState.searchTerm !== this.state.searchTerm) {
             this.setState({
-                filteredUsers: DUMMY_USERS.filter((user) =>
+                filteredUsers: this.context.users.filter((user) =>
                     user.name.includes(this.state.searchTerm)
                 )
             });
@@ -44,8 +48,10 @@ class UserFinder extends Component {
     render() {
         return (
             <Fragment>
-              <input className={styles.finder} type='search' onChange={this.searchChangeHandler.bind(this)} />
-              <Users users={this.state.filteredUsers} />
+                <input className={styles.finder} type='search' onChange={this.searchChangeHandler.bind(this)} />
+                <ErrorBoundary>
+                    <Users users={this.state.filteredUsers} />
+                </ErrorBoundary>
             </Fragment>
         );
     }

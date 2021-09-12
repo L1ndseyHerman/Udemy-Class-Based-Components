@@ -19,6 +19,22 @@ class Users extends Component {
     };
   }
 
+  //  An error boundary: 
+  //  If u type a letter that no users have, the browser will crash with this message!
+  componentDidUpdate() {
+    //  try/catch only works in reg JS, not React.
+    /*try {
+      someCodeWhichMightFail();
+    } catch (err) {
+      //  handle error
+    }*/
+
+    if (this.props.users.length === 0){
+      //  Can't throw this to another component the Vanilla JS way.
+      throw new Error('No users provided!');
+    }
+  }
+
   //  In classes, can't put methods inside the render() function, put them here:
   toggleUsersHandler() {
     //  THE WRONG WAY!
