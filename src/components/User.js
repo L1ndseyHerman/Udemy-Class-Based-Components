@@ -4,6 +4,11 @@ import { Component } from 'react';
 import classes from './User.module.css';
 
 class User extends Component {
+
+  componentWillUnmount() {
+    console.log('User will unmount!');
+  }
+
   //  This is a constructor, has that keyword, but don't need it here.
   //constructor() {}
 
